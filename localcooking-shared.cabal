@@ -1,0 +1,62 @@
+-- This file has been generated from package.yaml by hpack version 0.21.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 104044da7f22391f244d00b540b7dbe967cc1a00351a6a860a4d4b11453046a7
+
+name:           localcooking-shared
+version:        0.1.0.0
+description:    Please see the README on Github at <https://github.com/githubuser/localcooking-shared#readme>
+homepage:       https://github.com/githubuser/localcooking-shared#readme
+bug-reports:    https://github.com/githubuser/localcooking-shared/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2018 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+
+extra-source-files:
+    ChangeLog.md
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/localcooking-shared
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_localcooking_shared
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+  default-language: Haskell2010
+
+executable localcooking-shared-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_localcooking_shared
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , localcooking-shared
+  default-language: Haskell2010
+
+test-suite localcooking-shared-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_localcooking_shared
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , localcooking-shared
+  default-language: Haskell2010
