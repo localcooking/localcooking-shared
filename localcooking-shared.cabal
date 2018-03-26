@@ -2,10 +2,10 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 60a5345b156428abaef18934c8a86efa79d1f85c303e628a7074c1ba6d0fc959
+-- hash: a34d66cc25c290eea1c71c13bb582464e66c6f2a34b95cb864d672c37ebf8816
 
 name:           localcooking-shared
-version:        0.1.0.0
+version:        0.0.0
 description:    Please see the README on Github at <https://github.com/githubuser/localcooking-shared#readme>
 author:         Athan Clark
 maintainer:     athan.clark@localcooking.com
@@ -25,6 +25,8 @@ source-repository head
 
 library
   exposed-modules:
+      LocalCooking.Common.AuthToken
+      LocalCooking.Common.DeviceToken
       LocalCooking.Common.Password
   other-modules:
       Paths_localcooking_shared
@@ -38,8 +40,10 @@ library
     , base >=4.8 && <5
     , base64-bytestring
     , bytestring
+    , hashable
     , persistent
     , persistent-template
+    , saltine
     , text
   default-language: Haskell2010
 
@@ -59,8 +63,10 @@ test-suite localcooking-shared-test
     , base >=4.8 && <5
     , base64-bytestring
     , bytestring
+    , hashable
     , localcooking-shared
     , persistent
     , persistent-template
+    , saltine
     , text
   default-language: Haskell2010

@@ -41,6 +41,7 @@ packages:
 extra-deps:
   - aeson-attoparsec-0.0.0
   - attoparsec-base64-0.0.0
+  - saltine-0.1.0.0
 
 # Override default flag values for local packages and extra-deps
 # flags: {}

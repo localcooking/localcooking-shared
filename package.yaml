@@ -1,5 +1,5 @@
 name:                localcooking-shared
-version:             0.1.0.0
+version:             0.0.0
 git:                 "git://git.localcooking.com/localcooking/localcooking-shared.git"
 license:             BSD3
 author:              "Athan Clark"
@@ -27,8 +27,10 @@ dependencies:
 - attoparsec-base64
 - base64-bytestring
 - bytestring
+- hashable
 - persistent
 - persistent-template
+- saltine
 - text
 
 library:
