@@ -6,7 +6,7 @@ module LocalCooking.Common.DeviceToken where
 
 import Data.Attoparsec.Text (Parser)
 import Data.Attoparsec.Text.Base64 (base64)
-import Data.Aeson (FromJSON (..), ToJSON (toJSON))
+import Data.Aeson (FromJSON (parseJSON), ToJSON (toJSON))
 import Data.Aeson.Attoparsec (attoAeson)
 import qualified Data.Text.Encoding as T
 import qualified Data.ByteString.Base64 as BS64

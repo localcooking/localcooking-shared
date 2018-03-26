@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a34d66cc25c290eea1c71c13bb582464e66c6f2a34b95cb864d672c37ebf8816
+-- hash: f57df79ac5124c67d95ac4c79078fac85b9eccc68eca37c56dc2fc79cd9ee74f
 
 name:           localcooking-shared
 version:        0.0.0
@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Facebook.User
       LocalCooking.Common.AuthToken
       LocalCooking.Common.DeviceToken
       LocalCooking.Common.Password
