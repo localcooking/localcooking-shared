@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f57df79ac5124c67d95ac4c79078fac85b9eccc68eca37c56dc2fc79cd9ee74f
+-- hash: 852cf8a3a04827f263373043f74610a2b5977490bb7f2d9d33136f5d238e937c
 
 name:           localcooking-shared
 version:        0.0.0
@@ -25,14 +25,13 @@ source-repository head
 
 library
   exposed-modules:
-      Facebook.User
       LocalCooking.Common.AuthToken
-      LocalCooking.Common.DeviceToken
       LocalCooking.Common.Password
   other-modules:
       Paths_localcooking_shared
   hs-source-dirs:
       src
+  ghc-options: -Wall
   build-depends:
       aeson
     , aeson-attoparsec
@@ -55,7 +54,7 @@ test-suite localcooking-shared-test
       Paths_localcooking_shared
   hs-source-dirs:
       test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
     , aeson-attoparsec
