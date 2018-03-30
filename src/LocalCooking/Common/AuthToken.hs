@@ -1,5 +1,6 @@
 {-# LANGUAGE
     GeneralizedNewtypeDeriving
+  , DeriveGeneric
   #-}
 
 module LocalCooking.Common.AuthToken where
@@ -17,14 +18,27 @@ import Database.Persist.Class (PersistField)
 import Database.Persist.Sql (PersistFieldSql)
 import Crypto.Saltine.Core.Box (newNonce)
 import qualified Crypto.Saltine.Class as NaCl
+import GHC.Generics (Generic)
+import Test.QuickCheck (Arbitrary (..))
+import Test.QuickCheck.Instances ()
+import System.IO.Unsafe (unsafePerformIO)
 
 
 newtype AuthToken = AuthToken
   { getAuthToken :: ByteString
-  } deriving (Eq, Show, PersistField, PersistFieldSql, Hashable)
+  } deriving (Eq, Show, PersistField, PersistFieldSql, Hashable, Generic)
+
+instance Arbitrary AuthToken where
+  arbitrary =
+    let x = unsafePerformIO genAuthToken
+    in  x `seq` pure x
 
 authTokenParser :: Parser AuthToken
-authTokenParser = AuthToken . T.encodeUtf8 <$> base64
+authTokenParser = do
+  s <- base64
+  case BS64.decode (T.encodeUtf8 s) of
+    Left e -> fail (show e)
+    Right x -> pure (AuthToken x)
 
 instance ToJSON AuthToken where
   toJSON = toJSON . printAuthToken

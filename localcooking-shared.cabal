@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 852cf8a3a04827f263373043f74610a2b5977490bb7f2d9d33136f5d238e937c
+-- hash: c393a669dbf2f9f3680f49710555e5e5fa6d60bcc88d2601b53e46cd8b48f645
 
 name:           localcooking-shared
 version:        0.0.0
@@ -33,7 +33,8 @@ library
       src
   ghc-options: -Wall
   build-depends:
-      aeson
+      QuickCheck
+    , aeson
     , aeson-attoparsec
     , attoparsec
     , attoparsec-base64
@@ -43,6 +44,7 @@ library
     , hashable
     , persistent
     , persistent-template
+    , quickcheck-instances
     , saltine
     , text
   default-language: Haskell2010
@@ -56,7 +58,8 @@ test-suite localcooking-shared-test
       test
   ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson
+      QuickCheck
+    , aeson
     , aeson-attoparsec
     , attoparsec
     , attoparsec-base64
@@ -67,6 +70,9 @@ test-suite localcooking-shared-test
     , localcooking-shared
     , persistent
     , persistent-template
+    , quickcheck-instances
     , saltine
+    , tasty
+    , tasty-quickcheck
     , text
   default-language: Haskell2010
