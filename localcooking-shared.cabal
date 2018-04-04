@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c393a669dbf2f9f3680f49710555e5e5fa6d60bcc88d2601b53e46cd8b48f645
+-- hash: 753cde14730f028a62969c00823d82135315fac6bfe8d48353adf46c1dfc48e6
 
 name:           localcooking-shared
 version:        0.0.0
@@ -31,7 +31,7 @@ library
       Paths_localcooking_shared
   hs-source-dirs:
       src
-  ghc-options: -Wall
+  ghc-options: -Werror
   build-depends:
       QuickCheck
     , aeson
@@ -56,7 +56,7 @@ test-suite localcooking-shared-test
       Paths_localcooking_shared
   hs-source-dirs:
       test
-  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Werror -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       QuickCheck
     , aeson
