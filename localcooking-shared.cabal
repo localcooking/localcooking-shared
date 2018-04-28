@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7ad6530d6fd41b528116cae62147a7e209f8aa27bf4d4a138d79c1a6dd8ac854
+-- hash: 10d00533f568c43b2811d69206306bbee9522848360f7f3a0e9d5b29ed6ef26b
 
 name:           localcooking-shared
 version:        0.0.0
@@ -26,6 +26,8 @@ source-repository head
 library
   exposed-modules:
       LocalCooking.Common.AccessToken
+      LocalCooking.Common.AccessToken.Auth
+      LocalCooking.Common.AccessToken.Permission
       LocalCooking.Common.Password
   other-modules:
       Paths_localcooking_shared
@@ -42,6 +44,7 @@ library
     , base64-bytestring
     , bytestring
     , hashable
+    , newtype
     , persistent
     , persistent-template
     , quickcheck-instances
@@ -68,6 +71,7 @@ test-suite localcooking-shared-test
     , bytestring
     , hashable
     , localcooking-shared
+    , newtype
     , persistent
     , persistent-template
     , quickcheck-instances

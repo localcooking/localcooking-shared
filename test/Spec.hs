@@ -3,7 +3,7 @@
   , ScopedTypeVariables
   #-}
 
-import LocalCooking.Common.AuthToken (AuthToken)
+import LocalCooking.Common.AccessToken (AccessToken)
 import LocalCooking.Common.Password (HashedPassword)
 
 import Test.Tasty (defaultMain, testGroup)
@@ -15,7 +15,7 @@ import qualified Data.Aeson as Aeson
 
 main :: IO ()
 main = defaultMain $ testGroup "JSON encodings"
-  [ testProperty "AuthToken" (\(x :: AuthToken) -> jsonIso x)
+  [ testProperty "AccessToken" (\(x :: AccessToken) -> jsonIso x)
   , testProperty "HashedPassword" (\(x :: HashedPassword) -> jsonIso x)
   ]
 
