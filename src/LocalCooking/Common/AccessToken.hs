@@ -3,7 +3,7 @@
   , DeriveGeneric
   #-}
 
-module LocalCooking.Common.AuthToken where
+module LocalCooking.Common.AccessToken where
 
 import Data.Attoparsec.Text (Parser)
 import Data.Attoparsec.Text.Base64 (base64)
@@ -24,32 +24,32 @@ import Test.QuickCheck.Instances ()
 import System.IO.Unsafe (unsafePerformIO)
 
 
-newtype AuthToken = AuthToken
-  { getAuthToken :: ByteString
+newtype AccessToken = AccessToken
+  { getAccessToken :: ByteString
   } deriving (Eq, Show, PersistField, PersistFieldSql, Hashable, Generic)
 
-instance Arbitrary AuthToken where
+instance Arbitrary AccessToken where
   arbitrary =
-    let x = unsafePerformIO genAuthToken
+    let x = unsafePerformIO genAccessToken
     in  x `seq` pure x
 
-authTokenParser :: Parser AuthToken
-authTokenParser = do
+accessTokenParser :: Parser AccessToken
+accessTokenParser = do
   s <- base64
   case BS64.decode (T.encodeUtf8 s) of
     Left e -> fail (show e)
-    Right x -> pure (AuthToken x)
+    Right x -> pure (AccessToken x)
 
-instance ToJSON AuthToken where
-  toJSON = toJSON . printAuthToken
+instance ToJSON AccessToken where
+  toJSON = toJSON . printAccessToken
 
-instance FromJSON AuthToken where
-  parseJSON = attoAeson authTokenParser
+instance FromJSON AccessToken where
+  parseJSON = attoAeson accessTokenParser
 
-printAuthToken :: AuthToken -> Text
-printAuthToken (AuthToken x) = T.decodeUtf8 (BS64.encode x)
+printAccessToken :: AccessToken -> Text
+printAccessToken (AccessToken x) = T.decodeUtf8 (BS64.encode x)
 
 
 -- | Randomly generates a new one
-genAuthToken :: IO AuthToken
-genAuthToken = AuthToken . NaCl.encode <$> newNonce
+genAccessToken :: IO AccessToken
+genAccessToken = AccessToken . NaCl.encode <$> newNonce
