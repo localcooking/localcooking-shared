@@ -21,6 +21,7 @@ data UserRole
   | Farmer
   | Editor
   | Manager
+  | Admin
   deriving (Eq, Show, Read, Generic)
 derivePersistField "UserRole"
 
@@ -33,6 +34,7 @@ instance ToJSON UserRole where
     Farmer   -> "farmer"
     Editor   -> "editor"
     Manager  -> "manager"
+    Admin    -> "admin"
 
 instance FromJSON UserRole where
   parseJSON = attoAeson userRoleParser
@@ -44,4 +46,5 @@ userRoleParser = do
       farmer   = Farmer <$ string "farmer"
       editor   = Editor <$ string "editor"
       manager  = Manager <$ string "manager"
-  customer <|> chef <|> farmer <|> editor <|> manager
+      admin    = Admin <$ string "admin"
+  customer <|> chef <|> farmer <|> editor <|> manager <|> admin
