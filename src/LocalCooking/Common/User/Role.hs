@@ -22,7 +22,7 @@ data UserRole
   | Editor
   | Manager
   | Admin
-  deriving (Eq, Show, Read, Generic)
+  deriving (Eq, Ord, Show, Read, Generic)
 derivePersistField "UserRole"
 
 instance Hashable UserRole
