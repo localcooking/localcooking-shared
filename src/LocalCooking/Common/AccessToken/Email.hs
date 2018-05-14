@@ -25,3 +25,4 @@ newtype EmailToken = EmailToken
 instance Newtype EmailToken AccessToken where
   pack = EmailToken
   unpack = getEmailToken
+
