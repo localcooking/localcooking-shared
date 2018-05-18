@@ -4,7 +4,7 @@
   , DeriveGeneric
   #-}
 
-module LocalCooking.Common.Chef where
+module LocalCooking.Semantic.Mitch.Chef where
 
 import LocalCooking.Common.User.Name (Name)
 import LocalCooking.Common.Tag.Chef (ChefTag)

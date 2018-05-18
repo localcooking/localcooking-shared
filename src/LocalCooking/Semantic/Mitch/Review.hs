@@ -4,7 +4,7 @@
   , DeriveGeneric
   #-}
 
-module LocalCooking.Common.Review where
+module LocalCooking.Semantic.Mitch.Review where
 
 import LocalCooking.Common.Rating (Rating)
 

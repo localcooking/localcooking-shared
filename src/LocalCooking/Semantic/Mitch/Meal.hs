@@ -4,13 +4,13 @@
   , DeriveGeneric
   #-}
 
-module LocalCooking.Common.Meal where
+module LocalCooking.Semantic.Mitch.Meal where
 
+import LocalCooking.Semantic.Mitch.Review (ReviewSynopsis)
 import LocalCooking.Common.Tag.Meal (MealTag)
 import LocalCooking.Common.Rating (Rating)
 import LocalCooking.Common.Ingredient (Ingredient)
 import LocalCooking.Common.Diet (Diet)
-import LocalCooking.Common.Review (ReviewSynopsis)
 
 import Data.Image.Source (ImageSource)
 import Data.Text (Text)

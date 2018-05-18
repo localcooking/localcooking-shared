@@ -4,10 +4,10 @@
   , DeriveGeneric
   #-}
 
-module LocalCooking.Common.Menu where
+module LocalCooking.Semantic.Mitch.Menu where
 
-import LocalCooking.Common.Meal (MealSynopsis)
-import LocalCooking.Common.Chef (ChefSynopsis)
+import LocalCooking.Semantic.Mitch.Meal (MealSynopsis)
+import LocalCooking.Semantic.Mitch.Chef (ChefSynopsis)
 
 import Data.Time (UTCTime)
 import Data.Text.Markdown (MarkdownText)
