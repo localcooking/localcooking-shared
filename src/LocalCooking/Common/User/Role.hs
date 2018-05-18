@@ -13,6 +13,8 @@ import Data.Hashable (Hashable)
 import Control.Applicative ((<|>))
 import Database.Persist.TH (derivePersistField)
 import GHC.Generics (Generic)
+import Test.QuickCheck (Arbitrary (..))
+import Test.QuickCheck.Gen (oneof)
 
 
 data UserRole
@@ -24,6 +26,16 @@ data UserRole
   | Admin
   deriving (Eq, Ord, Enum, Show, Read, Generic)
 derivePersistField "UserRole"
+
+instance Arbitrary UserRole where
+  arbitrary = oneof
+    [ pure Customer
+    , pure Chef
+    , pure Farmer
+    , pure Editor
+    , pure Manager
+    , pure Admin
+    ]
 
 instance Hashable UserRole
 

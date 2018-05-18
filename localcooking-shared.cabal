@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: caf764ab33ea66f6a436259164f30134772f3b1adba89da74865970d323e0237
+-- hash: a2ac2429ccf7663b57b55710ec03351eaaedf5e5d22a0dfaf27a8b11849514c7
 
 name:           localcooking-shared
 version:        0.0.0
@@ -27,15 +27,23 @@ library
   exposed-modules:
       Data.Image.Source
       Data.Text.Markdown
+      Data.Text.Permalink
       LocalCooking.Common.AccessToken
       LocalCooking.Common.AccessToken.Auth
       LocalCooking.Common.AccessToken.Email
       LocalCooking.Common.AccessToken.Permission
+      LocalCooking.Common.Chef
+      LocalCooking.Common.Diet
       LocalCooking.Common.Ingredient
       LocalCooking.Common.Meal
+      LocalCooking.Common.Menu
       LocalCooking.Common.Password
+      LocalCooking.Common.Rating
+      LocalCooking.Common.Review
       LocalCooking.Common.Tag
+      LocalCooking.Common.Tag.Chef
       LocalCooking.Common.Tag.Meal
+      LocalCooking.Common.User.Name
       LocalCooking.Common.User.Role
   other-modules:
       Paths_localcooking_shared
@@ -58,6 +66,7 @@ library
     , quickcheck-instances
     , saltine
     , text
+    , time
   default-language: Haskell2010
 
 test-suite localcooking-shared-test
@@ -87,4 +96,5 @@ test-suite localcooking-shared-test
     , tasty
     , tasty-quickcheck
     , text
+    , time
   default-language: Haskell2010
