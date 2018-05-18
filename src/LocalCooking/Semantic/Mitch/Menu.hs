@@ -9,7 +9,7 @@ module LocalCooking.Semantic.Mitch.Menu where
 import LocalCooking.Semantic.Mitch.Meal (MealSynopsis)
 import LocalCooking.Semantic.Mitch.Chef (ChefSynopsis)
 
-import Data.Time (UTCTime)
+import Data.Time.Calendar (Day)
 import Data.Text.Markdown (MarkdownText)
 import Data.Image.Source (ImageSource)
 import Data.Text (Text)
@@ -25,8 +25,8 @@ import Test.QuickCheck.Instances ()
 
 
 data Menu = Menu
-  { menuPublished   :: Maybe UTCTime
-  , menuDeadline    :: UTCTime
+  { menuPublished   :: Maybe Day
+  , menuDeadline    :: Day
   , menuDescription :: MarkdownText
   , menuAuthor      :: ChefSynopsis
   , menuMeals       :: [MealSynopsis]
