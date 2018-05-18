@@ -7,7 +7,7 @@ module LocalCooking.Common.Tag where
 
 import Data.Text (Text)
 import Data.Hashable (Hashable)
-import Data.Aeson (FromJSON (..), ToJSON (toJSON), Value (String))
+import Data.Aeson (FromJSON, ToJSON)
 import Database.Persist.Class (PersistField)
 import Database.Persist.Sql (PersistFieldSql)
 import GHC.Generics (Generic)

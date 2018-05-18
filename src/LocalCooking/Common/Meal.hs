@@ -8,9 +8,11 @@ module LocalCooking.Common.Meal where
 
 import LocalCooking.Common.Tag.Meal (MealTag)
 import LocalCooking.Common.Ingredient (Ingredient)
+import LocalCooking.Common.Diet (Diet)
 
 import Data.Image.Source (ImageSource)
 import Data.Text (Text)
+import Data.Text.Permalink (Permalink)
 import Data.Text.Markdown (MarkdownText)
 import Data.Hashable (Hashable)
 import Data.Aeson (FromJSON (..), ToJSON (toJSON), Value (Object), (.=), object, (.:))
@@ -20,15 +22,30 @@ import Test.QuickCheck (Arbitrary (..))
 import Test.QuickCheck.Instances ()
 
 
--- | More user-oriented API than the database bindings
+data MealSynopsis = MealSynopsis
+  { mealSynopsisTitle     :: Text
+  , mealSynopsisPermalink :: Permalink
+  , mealSynopsisHeading   :: Text
+  , mealSynopsisImages    :: [ImageSource]
+  , mealSynopsisRating    :: Rating
+  , mealSynopsisOrders    :: Int
+  , mealSynopsisTags      :: [MealTag]
+  , mealSynopsisDiets     :: [Diet]
+  }
+
+
 data Meal = Meal
   { mealTitle        :: Text
-  , mealSynopsis     :: Text
+  , mealPermalink    :: Permalink
   , mealDescription  :: MarkdownText
   , mealInstructions :: MarkdownText
   , mealImages       :: [ImageSource]
   , mealIngredients  :: [Ingredient]
+  , mealDiets        :: [Diet]
   , mealTags         :: [MealTag]
+  , mealOrders       :: Int
+  , mealRating       :: Rating
+  , mealReviews      :: [ReviewSynopsis]
   } deriving (Eq, Show, Generic)
 
 instance ToJSON Meal where

@@ -3,7 +3,7 @@
   , DeriveGeneric
   #-}
 
-module LocalCooking.Common.Ingredient where
+module Data.Text.Permalink where
 
 import Data.Text (Text)
 import Data.Hashable (Hashable)
@@ -15,9 +15,9 @@ import Test.QuickCheck (Arbitrary (..))
 import Test.QuickCheck.Instances ()
 
 
-newtype Ingredient = Ingredient
-  { printIngredient :: Text
+newtype Permalink = Permalink
+  { printPermalink :: Text
   } deriving (Eq, Ord, Show, PersistField, PersistFieldSql, Hashable, Generic, ToJSON, FromJSON)
 
-instance Arbitrary Ingredient where
-  arbitrary = Ingredient <$> arbitrary
+instance Arbitrary Permalink where
+  arbitrary = Permalink <$> arbitrary

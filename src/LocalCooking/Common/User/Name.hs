@@ -3,7 +3,7 @@
   , DeriveGeneric
   #-}
 
-module LocalCooking.Common.Ingredient where
+module LocalCooking.Common.User.Name where
 
 import Data.Text (Text)
 import Data.Hashable (Hashable)
@@ -15,9 +15,10 @@ import Test.QuickCheck (Arbitrary (..))
 import Test.QuickCheck.Instances ()
 
 
-newtype Ingredient = Ingredient
-  { printIngredient :: Text
+
+newtype Name = Name
+  { getName :: [Text]
   } deriving (Eq, Ord, Show, PersistField, PersistFieldSql, Hashable, Generic, ToJSON, FromJSON)
 
-instance Arbitrary Ingredient where
-  arbitrary = Ingredient <$> arbitrary
+instance Arbitrary Name where
+  arbitrary = Name <$> arbitrary
