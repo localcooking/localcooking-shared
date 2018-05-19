@@ -6,6 +6,7 @@
 
 module LocalCooking.Semantic.Mitch.Menu where
 
+import LocalCooking.Common.Tag.Meal (MealTag)
 import LocalCooking.Semantic.Mitch.Meal (MealSynopsis)
 import LocalCooking.Semantic.Mitch.Chef (ChefSynopsis)
 
@@ -23,9 +24,39 @@ import Test.QuickCheck (Arbitrary (..))
 import Test.QuickCheck.Instances ()
 
 
+data MenuSynopsis = MenuSynopsis
+  { menuSynopsisPublished :: Day
+  , menuSynopsisDeadline  :: Day
+  , menuSynopsisHeadline  :: Text
+  , menuSynopsisTags      :: [MealTag]
+  } deriving (Eq, Show, Generic)
+
+
+instance Arbitrary MenuSynopsis where
+  arbitrary = MenuSynopsis <$> arbitrary
+                           <*> arbitrary
+                           <*> arbitrary
+                           <*> arbitrary
+
+instance ToJSON MenuSynopsis where
+  toJSON MenuSynopsis{..} = object
+    [ "published" .= menuSynopsisPublished
+    , "deadline" .= menuSynopsisDeadline
+    , "headline" .= menuSynopsisHeadline
+    , "tags" .= menuSynopsisTags
+    ]
+
+instance FromJSON MenuSynopsis where
+  parseJSON json = case json of
+    Object o -> MenuSynopsis <$> o .: "published"
+                             <*> o .: "deadline"
+                             <*> o .: "headline"
+                             <*> o .: "tags"
+    _ -> typeMismatch "MenuSynopsis" json
+
 
 data Menu = Menu
-  { menuPublished   :: Maybe Day
+  { menuPublished   :: Day
   , menuDeadline    :: Day
   , menuDescription :: MarkdownText
   , menuAuthor      :: ChefSynopsis

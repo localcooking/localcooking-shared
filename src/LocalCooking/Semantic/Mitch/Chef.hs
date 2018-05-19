@@ -6,6 +6,8 @@
 
 module LocalCooking.Semantic.Mitch.Chef where
 
+import LocalCooking.Semantic.Mitch.Menu (MenuSynopsis)
+import LocalCooking.Semantic.Mitch.Review (ReviewSynopsis)
 import LocalCooking.Common.User.Name (Name)
 import LocalCooking.Common.Tag.Chef (ChefTag)
 import LocalCooking.Common.Rating (Rating)
@@ -55,3 +57,40 @@ instance FromJSON ChefSynopsis where
                              <*> o .: "orders"
                              <*> o .: "tags"
     _ -> typeMismatch "ChefSynopsis" json
+
+
+data Chef = Chef
+  { chefName    :: Name
+  , chefImage   :: ImageSource
+  , chefRating  :: Rating
+  , chefReviews :: [ReviewSynopsis]
+  , chefOrders  :: Int
+  , chefTags    :: [ChefTag]
+  , chefMenus   :: [MenuSynopsis]
+  } deriving (Eq, Show, Generic)
+
+
+instance Arbitrary Chef where
+  arbitrary = Chef <$> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+                   <*> arbitrary
+
+instance ToJSON Chef where
+  toJSON Chef{..} = object
+    [ "name" .= chefName
+    , "image" .= chefImage
+    , "rating" .= chefRating
+    , "orders" .= chefOrders
+    , "tags" .= chefTags
+    ]
+
+instance FromJSON Chef where
+  parseJSON json = case json of
+    Object o -> Chef <$> o .: "name"
+                             <*> o .: "image"
+                             <*> o .: "rating"
+                             <*> o .: "orders"
+                             <*> o .: "tags"
+    _ -> typeMismatch "Chef" json
