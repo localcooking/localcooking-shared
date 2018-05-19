@@ -1,5 +1,6 @@
 {-# LANGUAGE
     OverloadedStrings
+  , TemplateHaskell
   , RecordWildCards
   , DeriveGeneric
   #-}
@@ -12,12 +13,13 @@ import Data.Text (Text)
 import Data.Hashable (Hashable)
 import Data.Aeson (FromJSON (..), ToJSON (..), (.:), object, Value (Object), (.=))
 import Data.Aeson.Types (typeMismatch)
-import Database.Persist.Class (PersistField)
-import Database.Persist.Sql (PersistFieldSql)
 import GHC.Generics (Generic)
 import Test.QuickCheck (Arbitrary (..))
 import Test.QuickCheck.Instances ()
 
+
+-- in the database, stored ingredients should point (many-to-many) to the diets
+-- they void, as an explicitly stored table `StoredIngredientVoids`
 
 data Ingredient = Ingredient
   { ingredientName  :: Text
