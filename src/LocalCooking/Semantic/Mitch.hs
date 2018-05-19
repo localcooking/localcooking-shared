@@ -1,6 +1,7 @@
 {-# LANGUAGE
     OverloadedStrings
   , RecordWildCards
+  , GeneralizedNewtypeDeriving
   , DeriveGeneric
   #-}
 
@@ -13,6 +14,7 @@ import LocalCooking.Common.User.Name (Name)
 import LocalCooking.Common.Diet (Diet)
 import LocalCooking.Common.Ingredient (Ingredient)
 
+import Data.Price (Price)
 import Data.Image.Source (ImageSource)
 import Data.Text (Text)
 import Data.Text.Permalink (Permalink)
@@ -22,37 +24,54 @@ import Data.Hashable (Hashable)
 import Data.Aeson (FromJSON (..), ToJSON (toJSON), Value (Object), (.=), object, (.:))
 import Data.Aeson.Types (typeMismatch)
 import GHC.Generics (Generic)
+import Database.Persist.Class (PersistField)
+import Database.Persist.Sql (PersistFieldSql)
 import Test.QuickCheck (Arbitrary (..))
 import Test.QuickCheck.Instances ()
 
 
 -- * Reviews
 
+-- | Global enumerator identifier for review permalinks - store in database globally
+-- as nonce counter
+newtype ReviewId = ReviewId
+  { getReviewId :: Int
+  } deriving (Eq, Ord, Show, PersistField, PersistFieldSql, Hashable, Generic, ToJSON, FromJSON)
+
+instance Arbitrary ReviewId where
+  arbitrary = ReviewId <$> arbitrary
+
+
 data ReviewSynopsis = ReviewSynopsis
   { reviewSynopsisRating  :: Rating
   , reviewSynopsisHeading :: Text
+  , reviewSynopsisId      :: ReviewId
   } deriving (Eq, Show, Generic)
 
 instance Arbitrary ReviewSynopsis where
   arbitrary = ReviewSynopsis <$> arbitrary
+                             <*> arbitrary
                              <*> arbitrary
 
 instance ToJSON ReviewSynopsis where
   toJSON ReviewSynopsis{..} = object
     [ "rating" .= reviewSynopsisRating
     , "heading" .= reviewSynopsisHeading
+    , "id" .= reviewSynopsisId
     ]
 
 instance FromJSON ReviewSynopsis where
   parseJSON json = case json of
     Object o -> ReviewSynopsis <$> o .: "rating"
                                <*> o .: "heading"
+                               <*> o .: "id"
     _ -> typeMismatch "ReviewSynopsis" json
 
 
 data Review = Review
   { reviewRating  :: Rating
   , reviewHeading :: Text
+  , reviewId      :: ReviewId
   , reviewBody    :: MarkdownText
   , reviewImages  :: [ImageSource]
   } deriving (Eq, Show, Generic)
@@ -62,12 +81,14 @@ instance Arbitrary Review where
                      <*> arbitrary
                      <*> arbitrary
                      <*> arbitrary
+                     <*> arbitrary
 
 
 instance ToJSON Review where
   toJSON Review{..} = object
     [ "rating" .= reviewRating
     , "heading" .= reviewHeading
+    , "id" .= reviewId
     , "body" .= reviewBody
     , "images" .= reviewImages
     ]
@@ -76,6 +97,7 @@ instance FromJSON Review where
   parseJSON json = case json of
     Object o -> Review <$> o .: "rating"
                        <*> o .: "heading"
+                       <*> o .: "id"
                        <*> o .: "body"
                        <*> o .: "images"
     _ -> typeMismatch "Review" json
@@ -160,11 +182,13 @@ data MealSynopsis = MealSynopsis
   , mealSynopsisOrders    :: Int
   , mealSynopsisTags      :: [MealTag]
   , mealSynopsisDiets     :: [Diet]
+  , mealSynopsisPrice     :: Price
   } deriving (Eq, Show, Generic)
 
 
 instance Arbitrary MealSynopsis where
   arbitrary = MealSynopsis <$> arbitrary
+                           <*> arbitrary
                            <*> arbitrary
                            <*> arbitrary
                            <*> arbitrary
@@ -184,6 +208,7 @@ instance ToJSON MealSynopsis where
     , "orders" .= mealSynopsisOrders
     , "tags" .= mealSynopsisTags
     , "diets" .= mealSynopsisDiets
+    , "price" .= mealSynopsisPrice
     ]
 
 instance FromJSON MealSynopsis where
@@ -196,6 +221,7 @@ instance FromJSON MealSynopsis where
                              <*> o .: "orders"
                              <*> o .: "tags"
                              <*> o .: "diets"
+                             <*> o .: "price"
     _ -> typeMismatch "MealSynopsis" json
 
 
@@ -211,11 +237,13 @@ data Meal = Meal
   , mealOrders       :: Int
   , mealRating       :: Rating
   , mealReviews      :: [ReviewSynopsis]
+  , mealPrice        :: Price
   } deriving (Eq, Show, Generic)
 
 
 instance Arbitrary Meal where
   arbitrary = Meal <$> arbitrary
+                   <*> arbitrary
                    <*> arbitrary
                    <*> arbitrary
                    <*> arbitrary
@@ -240,6 +268,7 @@ instance ToJSON Meal where
     , "orders" .= mealOrders
     , "rating" .= mealRating
     , "reviews" .= mealReviews
+    , "price" .= mealPrice
     ]
 
 instance FromJSON Meal where
@@ -255,17 +284,19 @@ instance FromJSON Meal where
                      <*> o .: "orders"
                      <*> o .: "rating"
                      <*> o .: "reviews"
+                     <*> o .: "price"
     _ -> typeMismatch "Meal" json
 
 
 -- * Chefs
 
 data ChefSynopsis = ChefSynopsis
-  { chefSynopsisName   :: Name
-  , chefSynopsisImage  :: ImageSource
-  , chefSynopsisRating :: Rating
-  , chefSynopsisOrders :: Int
-  , chefSynopsisTags   :: [ChefTag]
+  { chefSynopsisName      :: Name
+  , chefSynopsisPermalink :: Permalink
+  , chefSynopsisImage     :: ImageSource
+  , chefSynopsisRating    :: Rating
+  , chefSynopsisOrders    :: Int
+  , chefSynopsisTags      :: [ChefTag]
   } deriving (Eq, Show, Generic)
 
 
@@ -275,10 +306,12 @@ instance Arbitrary ChefSynopsis where
                            <*> arbitrary
                            <*> arbitrary
                            <*> arbitrary
+                           <*> arbitrary
 
 instance ToJSON ChefSynopsis where
   toJSON ChefSynopsis{..} = object
     [ "name" .= chefSynopsisName
+    , "permalink" .= chefSynopsisPermalink
     , "image" .= chefSynopsisImage
     , "rating" .= chefSynopsisRating
     , "orders" .= chefSynopsisOrders
@@ -288,6 +321,7 @@ instance ToJSON ChefSynopsis where
 instance FromJSON ChefSynopsis where
   parseJSON json = case json of
     Object o -> ChefSynopsis <$> o .: "name"
+                             <*> o .: "permalink"
                              <*> o .: "image"
                              <*> o .: "rating"
                              <*> o .: "orders"
@@ -296,13 +330,14 @@ instance FromJSON ChefSynopsis where
 
 
 data Chef = Chef
-  { chefName    :: Name
-  , chefImage   :: ImageSource
-  , chefRating  :: Rating
-  , chefReviews :: [ReviewSynopsis]
-  , chefOrders  :: Int
-  , chefTags    :: [ChefTag]
-  , chefMenus   :: [MenuSynopsis]
+  { chefName      :: Name
+  , chefPermalink :: Permalink
+  , chefImage     :: ImageSource
+  , chefRating    :: Rating
+  , chefReviews   :: [ReviewSynopsis]
+  , chefOrders    :: Int
+  , chefTags      :: [ChefTag]
+  , chefMenus     :: [MenuSynopsis]
   } deriving (Eq, Show, Generic)
 
 
@@ -314,10 +349,12 @@ instance Arbitrary Chef where
                    <*> arbitrary
                    <*> arbitrary
                    <*> arbitrary
+                   <*> arbitrary
 
 instance ToJSON Chef where
   toJSON Chef{..} = object
     [ "name" .= chefName
+    , "permalink" .= chefPermalink
     , "image" .= chefImage
     , "rating" .= chefRating
     , "reviews" .= chefReviews
@@ -329,6 +366,7 @@ instance ToJSON Chef where
 instance FromJSON Chef where
   parseJSON json = case json of
     Object o -> Chef <$> o .: "name"
+                     <*> o .: "permalink"
                      <*> o .: "image"
                      <*> o .: "rating"
                      <*> o .: "reviews"
