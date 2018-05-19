@@ -42,10 +42,13 @@ instance Arbitrary ReviewId where
   arbitrary = ReviewId <$> arbitrary
 
 
+-- | Note that this is from the customers' public perspectives - in the Chef interface,
+-- reviews will have additional user and order identifiers for Chef customer satisfaction
+-- management
 data ReviewSynopsis = ReviewSynopsis
   { reviewSynopsisRating  :: Rating
   , reviewSynopsisHeading :: Text
-  , reviewSynopsisId      :: ReviewId
+  , reviewSynopsisId      :: ReviewId -- ^ Backlink for clicking
   } deriving (Eq, Show, Generic)
 
 instance Arbitrary ReviewSynopsis where
@@ -71,9 +74,9 @@ instance FromJSON ReviewSynopsis where
 data Review = Review
   { reviewRating  :: Rating
   , reviewHeading :: Text
-  , reviewId      :: ReviewId
+  , reviewId      :: ReviewId -- ^ Backlink for HREF
   , reviewBody    :: MarkdownText
-  , reviewImages  :: [ImageSource]
+  , reviewImages  :: [ImageSource] -- ^ Evidence images uploaded by customer
   } deriving (Eq, Show, Generic)
 
 instance Arbitrary Review where
@@ -103,18 +106,22 @@ instance FromJSON Review where
     _ -> typeMismatch "Review" json
 
 
+
 -- * Menus
 
+-- | Perspective from Customers - doesn't including editing information to Chefs
 data MenuSynopsis = MenuSynopsis
   { menuSynopsisPublished :: Day
   , menuSynopsisDeadline  :: Day
   , menuSynopsisHeadline  :: Text
-  , menuSynopsisTags      :: [MealTag]
+  , menuSynopsisTags      :: [MealTag] -- ^ Featured tags from multiset of meals' tags
+  , menuSynopsisImages    :: [ImageSource] -- ^ Featured images from multiset of meals' images
   } deriving (Eq, Show, Generic)
 
 
 instance Arbitrary MenuSynopsis where
   arbitrary = MenuSynopsis <$> arbitrary
+                           <*> arbitrary
                            <*> arbitrary
                            <*> arbitrary
                            <*> arbitrary
@@ -125,6 +132,7 @@ instance ToJSON MenuSynopsis where
     , "deadline" .= menuSynopsisDeadline
     , "headline" .= menuSynopsisHeadline
     , "tags" .= menuSynopsisTags
+    , "images" .= menuSynopsisImages
     ]
 
 instance FromJSON MenuSynopsis where
@@ -133,6 +141,7 @@ instance FromJSON MenuSynopsis where
                              <*> o .: "deadline"
                              <*> o .: "headline"
                              <*> o .: "tags"
+                             <*> o .: "images"
     _ -> typeMismatch "MenuSynopsis" json
 
 
@@ -140,8 +149,8 @@ data Menu = Menu
   { menuPublished   :: Day
   , menuDeadline    :: Day
   , menuDescription :: MarkdownText
-  , menuAuthor      :: ChefSynopsis
-  , menuMeals       :: [MealSynopsis]
+  , menuAuthor      :: ChefSynopsis -- ^ Corner seller reference, like Amazon or Ebay
+  , menuMeals       :: [MealSynopsis] -- ^ Featured items
   } deriving (Eq, Show, Generic)
 
 
@@ -175,11 +184,11 @@ instance FromJSON Menu where
 
 data MealSynopsis = MealSynopsis
   { mealSynopsisTitle     :: Text
-  , mealSynopsisPermalink :: Permalink
+  , mealSynopsisPermalink :: Permalink -- ^ Backlink for clicking
   , mealSynopsisHeading   :: Text
-  , mealSynopsisImages    :: [ImageSource]
+  , mealSynopsisImages    :: [ImageSource] -- ^ Featured images of meal, for listing
   , mealSynopsisRating    :: Rating
-  , mealSynopsisOrders    :: Int
+  , mealSynopsisOrders    :: Int -- ^ Like "number of purchases" - for customer confidence
   , mealSynopsisTags      :: [MealTag]
   , mealSynopsisDiets     :: [Diet]
   , mealSynopsisPrice     :: Price
@@ -227,12 +236,12 @@ instance FromJSON MealSynopsis where
 
 data Meal = Meal
   { mealTitle        :: Text
-  , mealPermalink    :: Permalink
+  , mealPermalink    :: Permalink -- ^ Backlink for HREF
   , mealDescription  :: MarkdownText
   , mealInstructions :: MarkdownText
   , mealImages       :: [ImageSource]
   , mealIngredients  :: [Ingredient]
-  , mealDiets        :: [Diet]
+  , mealDiets        :: [Diet] -- ^ derived from Ingredients listing in DB
   , mealTags         :: [MealTag]
   , mealOrders       :: Int
   , mealRating       :: Rating
@@ -292,8 +301,8 @@ instance FromJSON Meal where
 
 data ChefSynopsis = ChefSynopsis
   { chefSynopsisName      :: Name
-  , chefSynopsisPermalink :: Permalink
-  , chefSynopsisImage     :: ImageSource
+  , chefSynopsisPermalink :: Permalink -- ^ Backlink for clicking
+  , chefSynopsisImage     :: ImageSource -- ^ Primary Chef profile image
   , chefSynopsisRating    :: Rating
   , chefSynopsisOrders    :: Int
   , chefSynopsisTags      :: [ChefTag]
@@ -331,13 +340,13 @@ instance FromJSON ChefSynopsis where
 
 data Chef = Chef
   { chefName      :: Name
-  , chefPermalink :: Permalink
-  , chefImage     :: ImageSource
+  , chefPermalink :: Permalink -- ^ Backlink for HREF
+  , chefImages    :: [ImageSource] -- ^ All chef images
   , chefRating    :: Rating
   , chefReviews   :: [ReviewSynopsis]
   , chefOrders    :: Int
   , chefTags      :: [ChefTag]
-  , chefMenus     :: [MenuSynopsis]
+  , chefMenus     :: [MenuSynopsis] -- ^ Active menus -- TODO historic menus, too?
   } deriving (Eq, Show, Generic)
 
 
@@ -355,7 +364,7 @@ instance ToJSON Chef where
   toJSON Chef{..} = object
     [ "name" .= chefName
     , "permalink" .= chefPermalink
-    , "image" .= chefImage
+    , "images" .= chefImages
     , "rating" .= chefRating
     , "reviews" .= chefReviews
     , "orders" .= chefOrders
@@ -367,7 +376,7 @@ instance FromJSON Chef where
   parseJSON json = case json of
     Object o -> Chef <$> o .: "name"
                      <*> o .: "permalink"
-                     <*> o .: "image"
+                     <*> o .: "images"
                      <*> o .: "rating"
                      <*> o .: "reviews"
                      <*> o .: "orders"
