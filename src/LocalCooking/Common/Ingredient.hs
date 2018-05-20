@@ -1,6 +1,7 @@
 {-# LANGUAGE
     OverloadedStrings
   , TemplateHaskell
+  , GeneralizedNewtypeDeriving
   , RecordWildCards
   , DeriveGeneric
   #-}
@@ -14,15 +15,29 @@ import Data.Hashable (Hashable)
 import Data.Aeson (FromJSON (..), ToJSON (..), (.:), object, Value (Object), (.=))
 import Data.Aeson.Types (typeMismatch)
 import GHC.Generics (Generic)
+import Database.Persist.Class (PersistField)
+import Database.Persist.Sql (PersistFieldSql)
 import Test.QuickCheck (Arbitrary (..))
 import Test.QuickCheck.Instances ()
+
+
+
+
+
+newtype IngredientName = IngredientName
+  { getIngredientName :: Text
+  } deriving (Eq, Ord, Show, PersistField, PersistFieldSql, Hashable, Generic, ToJSON, FromJSON)
+
+instance Arbitrary IngredientName where
+  arbitrary = IngredientName <$> arbitrary
+
 
 
 -- in the database, stored ingredients should point (many-to-many) to the diets
 -- they void, as an explicitly stored table `StoredIngredientVoids`
 
 data Ingredient = Ingredient
-  { ingredientName  :: Text
+  { ingredientName  :: IngredientName
   , ingredientVoids :: [Diet]
   } deriving (Eq, Ord, Show, Generic)
 
