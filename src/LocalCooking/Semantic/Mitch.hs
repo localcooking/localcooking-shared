@@ -118,7 +118,7 @@ instance FromJSON Review where
 data MenuSynopsis = MenuSynopsis
   { menuSynopsisPublished :: Day
   , menuSynopsisDeadline  :: Day
-  , menuSynopsisHeadline  :: Text
+  , menuSynopsisHeading   :: Text
   , menuSynopsisTags      :: [MealTag] -- ^ Featured tags from multiset of meals' tags
   , menuSynopsisImages    :: [ImageSource] -- ^ Featured images from multiset of meals' images
   } deriving (Eq, Show, Generic)
@@ -135,7 +135,7 @@ instance ToJSON MenuSynopsis where
   toJSON MenuSynopsis{..} = object
     [ "published" .= menuSynopsisPublished
     , "deadline" .= menuSynopsisDeadline
-    , "headline" .= menuSynopsisHeadline
+    , "heading" .= menuSynopsisHeading
     , "tags" .= menuSynopsisTags
     , "images" .= menuSynopsisImages
     ]
@@ -144,7 +144,7 @@ instance FromJSON MenuSynopsis where
   parseJSON json = case json of
     Object o -> MenuSynopsis <$> o .: "published"
                              <*> o .: "deadline"
-                             <*> o .: "headline"
+                             <*> o .: "heading"
                              <*> o .: "tags"
                              <*> o .: "images"
     _ -> typeMismatch "MenuSynopsis" json
@@ -344,19 +344,21 @@ instance FromJSON ChefSynopsis where
 
 
 data Chef = Chef
-  { chefName      :: Name
-  , chefPermalink :: Permalink -- ^ Backlink for HREF
-  , chefImages    :: [ImageSource] -- ^ All chef images
-  , chefRating    :: Rating
-  , chefReviews   :: [ReviewSynopsis]
-  , chefOrders    :: Int
-  , chefTags      :: [ChefTag]
-  , chefMenus     :: [MenuSynopsis] -- ^ Active menus -- TODO historic menus, too?
+  { chefName         :: Name
+  , chefPermalink    :: Permalink -- ^ Backlink for HREF
+  , chefImages       :: [ImageSource] -- ^ All chef images
+  , chefRating       :: Rating
+  , chefReviews      :: [ReviewSynopsis]
+  , chefActiveOrders :: Int
+  , chefTotalOrders  :: Int
+  , chefTags         :: [ChefTag]
+  , chefMenus        :: [MenuSynopsis] -- ^ Active menus -- TODO historic menus, too?
   } deriving (Eq, Show, Generic)
 
 
 instance Arbitrary Chef where
   arbitrary = Chef <$> arbitrary
+                   <*> arbitrary
                    <*> arbitrary
                    <*> arbitrary
                    <*> arbitrary
@@ -372,7 +374,8 @@ instance ToJSON Chef where
     , "images" .= chefImages
     , "rating" .= chefRating
     , "reviews" .= chefReviews
-    , "orders" .= chefOrders
+    , "activeOrders" .= chefActiveOrders
+    , "totalOrders" .= chefTotalOrders
     , "tags" .= chefTags
     , "menus" .= chefMenus
     ]
@@ -384,7 +387,8 @@ instance FromJSON Chef where
                      <*> o .: "images"
                      <*> o .: "rating"
                      <*> o .: "reviews"
-                     <*> o .: "orders"
+                     <*> o .: "activeOrders"
+                     <*> o .: "totalOrders"
                      <*> o .: "tags"
                      <*> o .: "menus"
     _ -> typeMismatch "Chef" json
