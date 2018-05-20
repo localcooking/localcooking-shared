@@ -14,6 +14,7 @@ import LocalCooking.Common.User.Name (Name)
 import LocalCooking.Common.Diet (Diet)
 import LocalCooking.Common.Ingredient (Ingredient)
 
+import Data.Time (UTCTime)
 import Data.Price (Price)
 import Data.Image.Source (ImageSource)
 import Data.Text (Text)
@@ -72,15 +73,17 @@ instance FromJSON ReviewSynopsis where
 
 
 data Review = Review
-  { reviewRating  :: Rating
-  , reviewHeading :: Text
-  , reviewId      :: ReviewId -- ^ Backlink for HREF
-  , reviewBody    :: MarkdownText
-  , reviewImages  :: [ImageSource] -- ^ Evidence images uploaded by customer
+  { reviewRating    :: Rating
+  , reviewSubmitted :: UTCTime
+  , reviewHeading   :: Text
+  , reviewId        :: ReviewId -- ^ Backlink for HREF
+  , reviewBody      :: MarkdownText
+  , reviewImages    :: [ImageSource] -- ^ Evidence images uploaded by customer
   } deriving (Eq, Show, Generic)
 
 instance Arbitrary Review where
   arbitrary = Review <$> arbitrary
+                     <*> arbitrary
                      <*> arbitrary
                      <*> arbitrary
                      <*> arbitrary
@@ -90,6 +93,7 @@ instance Arbitrary Review where
 instance ToJSON Review where
   toJSON Review{..} = object
     [ "rating" .= reviewRating
+    , "submitted" .= reviewSubmitted
     , "heading" .= reviewHeading
     , "id" .= reviewId
     , "body" .= reviewBody
@@ -99,6 +103,7 @@ instance ToJSON Review where
 instance FromJSON Review where
   parseJSON json = case json of
     Object o -> Review <$> o .: "rating"
+                       <*> o .: "submitted"
                        <*> o .: "heading"
                        <*> o .: "id"
                        <*> o .: "body"
