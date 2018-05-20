@@ -24,12 +24,14 @@ ghc-options:
 
 dependencies:
 - base >= 4.8 && < 5
+- localcooking-fb
 - aeson
 - aeson-attoparsec
 - attoparsec
 - attoparsec-base64
 - base64-bytestring
 - bytestring
+- emailaddress >= 0.2.0.1
 - hashable
 - newtype
 - persistent

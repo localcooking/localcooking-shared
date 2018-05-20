@@ -3,7 +3,7 @@
   , DeriveGeneric
   #-}
 
-module LocalCooking.Common.Password where
+module LocalCooking.Common.User.Password where
 
 import Data.Attoparsec.Text (Parser)
 import Data.Attoparsec.Text.Base64 (base64)

@@ -5,7 +5,7 @@
   , DeriveGeneric
   #-}
 
-module LocalCooking.Common.Pagination where
+module Data.List.Sorting where
 
 import Data.Aeson (FromJSON (..), ToJSON (..), Value (String, Object), object, (.=), (.:))
 import Data.Aeson.Types (typeMismatch)
@@ -16,6 +16,7 @@ import Control.Applicative ((<|>))
 import GHC.Generics (Generic)
 import Test.QuickCheck (Arbitrary (..))
 import Test.QuickCheck.Gen (oneof)
+
 
 
 data SortOrdering = Ascending | Descending
@@ -42,28 +43,22 @@ sortOrderingParser = do
 
 
 -- | Pagination datum for any type of json-encodable field-accessor representation datum
-data PaginationArgs field = PaginationArgs
-  { paginationArgsOrdering :: SortOrdering
-  , paginationArgsIndex    :: Int
-  , paginationArgsSize     :: Int
-  , paginationArgsField    :: field
+data SortingArgs field = SortingArgs
+  { sortingArgsOrdering :: SortOrdering
+  , sortingArgsField    :: field
   } deriving (Eq, Ord, Show, Generic)
 
-instance Arbitrary field => Arbitrary (PaginationArgs field) where
-  arbitrary = PaginationArgs <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+instance Arbitrary field => Arbitrary (SortingArgs field) where
+  arbitrary = SortingArgs <$> arbitrary <*> arbitrary
 
-instance ToJSON field => ToJSON (PaginationArgs field) where
-  toJSON PaginationArgs{..} = object
-    [ "ordering" .= paginationArgsOrdering
-    , "index" .= paginationArgsIndex
-    , "size" .= paginationArgsSize
-    , "field" .= paginationArgsField
+instance ToJSON field => ToJSON (SortingArgs field) where
+  toJSON SortingArgs{..} = object
+    [ "ordering" .= sortingArgsOrdering
+    , "field" .= sortingArgsField
     ]
 
-instance FromJSON field => FromJSON (PaginationArgs field) where
+instance FromJSON field => FromJSON (SortingArgs field) where
   parseJSON json = case json of
-    Object o -> PaginationArgs <$> o .: "ordering"
-                               <*> o .: "index"
-                               <*> o .: "size"
-                               <*> o .: "field"
-    _ -> typeMismatch "PaginationArgs" json
+    Object o -> SortingArgs <$> o .: "ordering"
+                            <*> o .: "field"
+    _ -> typeMismatch "SortingArgs" json
