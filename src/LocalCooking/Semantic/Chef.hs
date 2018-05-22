@@ -9,7 +9,7 @@ module LocalCooking.Semantic.Chef where
 import LocalCooking.Common.Tag.Chef (ChefTag)
 import LocalCooking.Common.Tag.Meal (MealTag)
 import LocalCooking.Common.User.Name (Name)
-import LocalCooking.Common.Ingredient (Ingredient)
+import LocalCooking.Common.Ingredient (IngredientName)
 import LocalCooking.Common.Order (OrderProgress)
 
 import Data.Price (Price)
@@ -71,7 +71,7 @@ data MealSettings = MealSettings
   , mealSettingsDescription  :: MarkdownText
   , mealSettingsInstructions :: MarkdownText
   , mealSettingsImages       :: [ImageSource]
-  , mealSettingsIngredients  :: [Ingredient]
+  , mealSettingsIngredients  :: [IngredientName]
   , mealSettingsTags         :: [MealTag]
   , mealSettingsPrice        :: Price
   } deriving (Eq, Show, Generic)
