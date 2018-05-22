@@ -5,9 +5,8 @@
 
 module Data.Image.Source where
 
-import Data.Aeson (FromJSON (..), ToJSON (..), Value (String))
 import Data.Hashable (Hashable)
-import Data.Aeson (FromJSON (..), ToJSON (toJSON), Value (String))
+import Data.Aeson (FromJSON, ToJSON)
 import Database.Persist.Class (PersistField)
 import Database.Persist.Sql (PersistFieldSql)
 import GHC.Generics (Generic)

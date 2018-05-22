@@ -1,7 +1,6 @@
 {-# LANGUAGE
     OverloadedStrings
   , RecordWildCards
-  , GeneralizedNewtypeDeriving
   , DeriveGeneric
   #-}
 
@@ -10,13 +9,9 @@ module LocalCooking.Semantic.Common where
 import LocalCooking.Common.User.Password (HashedPassword)
 import Facebook.Types (FacebookUserId, FacebookUserAccessToken)
 
-import Data.Aeson (FromJSON (..), ToJSON (..), Value (String, Object), object, (.=), (.:))
+import Data.Aeson (FromJSON (..), ToJSON (..), Value (Object), object, (.=), (.:))
 import Data.Aeson.Types (typeMismatch)
-import Data.Aeson.Attoparsec (attoAeson)
-import Data.Attoparsec.Text (Parser, string)
-import Data.Hashable (Hashable)
 import Text.EmailAddress (EmailAddress)
-import Control.Applicative ((<|>))
 import GHC.Generics (Generic)
 import Test.QuickCheck (Arbitrary (..))
 import Test.QuickCheck.Gen (oneof)

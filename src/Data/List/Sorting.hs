@@ -1,7 +1,6 @@
 {-# LANGUAGE
     OverloadedStrings
   , RecordWildCards
-  , GeneralizedNewtypeDeriving
   , DeriveGeneric
   #-}
 

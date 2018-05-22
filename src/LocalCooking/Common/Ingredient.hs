@@ -1,6 +1,5 @@
 {-# LANGUAGE
     OverloadedStrings
-  , TemplateHaskell
   , GeneralizedNewtypeDeriving
   , RecordWildCards
   , DeriveGeneric

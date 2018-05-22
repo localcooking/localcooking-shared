@@ -1,33 +1,26 @@
 {-# LANGUAGE
     OverloadedStrings
   , RecordWildCards
-  , GeneralizedNewtypeDeriving
   , DeriveGeneric
   #-}
 
 module LocalCooking.Semantic.Chef where
 
-import LocalCooking.Common.Rating (Rating)
 import LocalCooking.Common.Tag.Chef (ChefTag)
 import LocalCooking.Common.Tag.Meal (MealTag)
 import LocalCooking.Common.User.Name (Name)
-import LocalCooking.Common.Diet (Diet)
 import LocalCooking.Common.Ingredient (Ingredient)
 import LocalCooking.Common.Order (OrderProgress)
 
-import Data.Time (UTCTime)
 import Data.Price (Price)
 import Data.Image.Source (ImageSource)
 import Data.Text (Text)
 import Data.Text.Permalink (Permalink)
 import Data.Text.Markdown (MarkdownText)
 import Data.Time.Calendar (Day)
-import Data.Hashable (Hashable)
 import Data.Aeson (FromJSON (..), ToJSON (toJSON), Value (Object), (.=), object, (.:))
 import Data.Aeson.Types (typeMismatch)
 import GHC.Generics (Generic)
-import Database.Persist.Class (PersistField)
-import Database.Persist.Sql (PersistFieldSql)
 import Test.QuickCheck (Arbitrary (..))
 import Test.QuickCheck.Instances ()
 
@@ -118,6 +111,7 @@ instance FromJSON MealSettings where
                              <*> o .: "ingredients"
                              <*> o .: "tags"
                              <*> o .: "price"
+    _ -> typeMismatch "MealSettings" json
 
 data MenuSettings = MenuSettings
   { menuSettingsPublished   :: Maybe Day -- ^ Special treatment when Just
@@ -154,6 +148,7 @@ instance FromJSON MenuSettings where
                              <*> o .: "description"
                              <*> o .: "tags"
                              <*> o .: "images"
+    _ -> typeMismatch "MenuSettings" json
 
 data Order = Order
   { orderMeal     :: Permalink
@@ -178,3 +173,4 @@ instance FromJSON Order where
     Object o -> Order <$> o .: "meal"
                       <*> o .: "progress"
                       <*> o .: "volume"
+    _ -> typeMismatch "Order" json
