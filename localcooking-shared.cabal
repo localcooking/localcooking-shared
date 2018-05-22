@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b0b3f2ab50d64436fc35501818f0b935b736d93d6eb385cc068a70644dc47e82
+-- hash: 8a6b034f83f1eb313e89da6b86186da12bba0ec7f22aedd4e4971a453b9fd1c5
 
 name:           localcooking-shared
 version:        0.0.0
@@ -45,9 +45,6 @@ library
       LocalCooking.Common.User.Name
       LocalCooking.Common.User.Password
       LocalCooking.Common.User.Role
-      LocalCooking.Semantic.Chef
-      LocalCooking.Semantic.Common
-      LocalCooking.Semantic.Mitch
   other-modules:
       Paths_localcooking_shared
   hs-source-dirs:
