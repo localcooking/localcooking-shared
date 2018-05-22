@@ -13,6 +13,7 @@ import LocalCooking.Common.Tag.Meal (MealTag)
 import LocalCooking.Common.User.Name (Name)
 import LocalCooking.Common.Diet (Diet)
 import LocalCooking.Common.Ingredient (Ingredient)
+import LocalCooking.Common.Order (OrderProgress)
 
 import Data.Time (UTCTime)
 import Data.Price (Price)
@@ -347,6 +348,7 @@ data Chef = Chef
   { chefName         :: Name
   , chefPermalink    :: Permalink -- ^ Backlink for HREF
   , chefImages       :: [ImageSource] -- ^ All chef images
+  , chefBio          :: MarkdownText
   , chefRating       :: Rating
   , chefReviews      :: [ReviewSynopsis]
   , chefActiveOrders :: Int
@@ -366,12 +368,14 @@ instance Arbitrary Chef where
                    <*> arbitrary
                    <*> arbitrary
                    <*> arbitrary
+                   <*> arbitrary
 
 instance ToJSON Chef where
   toJSON Chef{..} = object
     [ "name" .= chefName
     , "permalink" .= chefPermalink
     , "images" .= chefImages
+    , "bio" .= chefBio
     , "rating" .= chefRating
     , "reviews" .= chefReviews
     , "activeOrders" .= chefActiveOrders
@@ -385,6 +389,7 @@ instance FromJSON Chef where
     Object o -> Chef <$> o .: "name"
                      <*> o .: "permalink"
                      <*> o .: "images"
+                     <*> o .: "bio"
                      <*> o .: "rating"
                      <*> o .: "reviews"
                      <*> o .: "activeOrders"
@@ -392,3 +397,24 @@ instance FromJSON Chef where
                      <*> o .: "tags"
                      <*> o .: "menus"
     _ -> typeMismatch "Chef" json
+
+
+
+data Order = Order
+  { orderMeals :: [(MealSynopsis, OrderProgress)]
+  , orderTime  :: UTCTime
+  } deriving (Eq, Show, Generic)
+
+instance Arbitrary Order where
+  arbitrary = Order <$> arbitrary <*> arbitrary
+
+instance ToJSON Order where
+  toJSON Order{..} = object
+    [ "meals" .= orderMeals
+    , "time" .= orderTime
+    ]
+
+instance FromJSON Order where
+  parseJSON json = case json of
+    Object o -> Order <$> o .: "meals" <*> o .: "time"
+    _ -> typeMismatch "Order" json
