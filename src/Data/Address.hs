@@ -11,6 +11,9 @@ import Data.Aeson (FromJSON (..), ToJSON (..), Value (String, Object), (.=), (.:
 import Data.Aeson.Types (typeMismatch)
 import Text.Read (readMaybe)
 import Database.Persist.TH (derivePersistField, derivePersistFieldJSON)
+import Test.QuickCheck (Arbitrary (..))
+import Test.QuickCheck.Gen (oneof)
+import Test.QuickCheck.Instances ()
 
 
 data USAState
@@ -66,6 +69,60 @@ data USAState
   | WY
   deriving (Eq, Ord, Show, Read)
 
+instance Arbitrary USAState where
+  arbitrary = oneof
+    [ pure AL
+    , pure AK
+    , pure AZ
+    , pure AR
+    , pure CA
+    , pure CO
+    , pure CT
+    , pure DE
+    , pure FL
+    , pure GA
+    , pure HI
+    , pure ID
+    , pure IL
+    , pure IN
+    , pure IA
+    , pure KS
+    , pure KY
+    , pure LA
+    , pure ME
+    , pure MD
+    , pure MA
+    , pure MI
+    , pure MN
+    , pure MS
+    , pure MO
+    , pure MT
+    , pure NE
+    , pure NV
+    , pure NH
+    , pure NJ
+    , pure NM
+    , pure NY
+    , pure NC
+    , pure ND
+    , pure OH
+    , pure OK
+    , pure OR
+    , pure PA
+    , pure RI
+    , pure SC
+    , pure SD
+    , pure TN
+    , pure TX
+    , pure UT
+    , pure VT
+    , pure VA
+    , pure WA
+    , pure WV
+    , pure WI
+    , pure WY
+    ]
+
 instance ToJSON USAState where
   toJSON = toJSON . show
 
@@ -88,6 +145,12 @@ data USAAddress = USAAddress
   , addressState  :: USAState
   , addressZip    :: Int
   } deriving (Eq, Show)
+
+instance Arbitrary USAAddress where
+  arbitrary = USAAddress <$> arbitrary
+                         <*> arbitrary
+                         <*> arbitrary
+                         <*> arbitrary
 
 instance ToJSON USAAddress where
   toJSON USAAddress{..} = object
