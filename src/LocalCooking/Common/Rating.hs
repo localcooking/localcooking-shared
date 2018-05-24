@@ -10,6 +10,7 @@ import Data.Aeson (FromJSON (..), ToJSON (..), Value (String))
 import Data.Aeson.Attoparsec (attoAeson)
 import Data.Attoparsec.Text (Parser, string)
 import Data.Hashable (Hashable)
+import Data.Semigroup (Semigroup (..))
 import Control.Applicative ((<|>))
 import Database.Persist.TH (derivePersistField)
 import GHC.Generics (Generic)
@@ -80,3 +81,38 @@ ratingParser = do
       fourhalf = FourHalfStar <$ string "9/2"
       five = FiveStar <$ string "5"
   zero <|> half <|> one <|> onehalf <|> two <|> twohalf <|> three <|> threehalf <|> four <|> fourhalf <|> five
+
+
+ratingToRational :: Rating -> Rational
+ratingToRational r = case r of
+    ZeroStar -> 0
+    HalfStar -> 1/2
+    OneStar -> 1
+    OneHalfStar -> 3/2
+    TwoStar -> 2
+    TwoHalfStar -> 5/2
+    ThreeStar -> 3
+    ThreeHalfStar -> 7/2
+    FourStar -> 4
+    FourHalfStar -> 9/2
+    FiveStar -> 5
+
+ratingFromRational :: Rational -> Rating
+ratingFromRational q
+  | q <= 0    = ZeroStar
+  | q <= 1/2  = HalfStar
+  | q <= 1    = OneStar
+  | q <= 3/2  = OneHalfStar
+  | q <= 2    = TwoStar
+  | q <= 5/2  = TwoHalfStar
+  | q <= 3    = ThreeStar
+  | q <= 7/2  = ThreeHalfStar
+  | q <= 4    = FourStar
+  | q <= 9/2  = FourHalfStar
+  | otherwise = FiveStar
+
+
+instance Semigroup Rating where
+  x <> y = ratingFromRational z
+    where
+      z = (ratingToRational x + ratingToRational y) / 2
