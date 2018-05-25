@@ -48,33 +48,6 @@ main = defaultMain $ testGroup "JSON encodings"
   , testProperty "LocalCooking.Common.User.Role" (\(x :: UserRole) -> jsonIso x)
   , testProperty "LocalCooking.Common.User.Password" (\(x :: HashedPassword) -> jsonIso x)
 
-  -- , testProperty "LocalCooking.Semantic.Mitch.ReviewSynopsis"
-  --   (\(x :: ReviewSynopsis) -> jsonIso x)
-  -- , testProperty "LocalCooking.Semantic.Mitch.Review"
-  --   (\(x :: Review) -> jsonIso x)
-  -- , testProperty "LocalCooking.Semantic.Mitch.MealSynopsis"
-  --   (\(x :: MealSynopsis) -> jsonIso x)
-  -- , testProperty "LocalCooking.Semantic.Mitch.Meal"
-  --   (\(x :: Meal) -> jsonIso x)
-  -- , testProperty "LocalCooking.Semantic.Mitch.ChefSynopsis"
-  --   (\(x :: ChefSynopsis) -> jsonIso x)
-  -- , testProperty "LocalCooking.Semantic.Mitch.Chef"
-  --   (\(x :: Chef) -> jsonIso x)
-  -- , testProperty "LocalCooking.Semantic.Mitch.MenuSynopsis"
-  --   (\(x :: MenuSynopsis) -> jsonIso x)
-  -- , testProperty "LocalCooking.Semantic.Mitch.Menu"
-  --   (\(x :: Menu) -> jsonIso x)
-  -- , testProperty "LocalCooking.Semantic.Mitch.Order"
-  --   (\(x :: Mitch.Order) -> jsonIso x)
-
-  -- , testProperty "LocalCooking.Semantic.Chef.MealSettings"
-  --   (\(x :: MealSettings) -> jsonIso x)
-  -- , testProperty "LocalCooking.Semantic.Chef.ChefSettings"
-  --   (\(x :: ChefSettings) -> jsonIso x)
-  -- , testProperty "LocalCooking.Semantic.Chef.MenuSettings"
-  --   (\(x :: MenuSettings) -> jsonIso x)
-  -- , testProperty "LocalCooking.Semantic.Chef.Order"
-  --   (\(x :: Chef.Order) -> jsonIso x)
   ]
 
 
