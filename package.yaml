@@ -24,7 +24,6 @@ ghc-options:
 
 dependencies:
 - base >= 4.8 && < 5
-- localcooking-fb
 - aeson
 - aeson-attoparsec
 - attoparsec

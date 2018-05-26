@@ -35,7 +35,6 @@ resolver: lts-11.2
 #  - wai
 packages:
 - .
-- ../localcooking-fb/
 - location:
     git: git@git.localcooking.com:private-tooling/emailaddress.git
     commit: 31540c8305e0db6b98dcc1beb79afd1e9ed35bb8

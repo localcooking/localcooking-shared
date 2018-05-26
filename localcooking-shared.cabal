@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: cc3f6dceb086a34f5b807cd45f8bbb5d072e2a418cc8c2a868b7fd996c24b84e
+-- hash: 51468b958352a34df07f0d3c00824eea4c6badb58d7ea7928bf4ba640393e1d2
 
 name:           localcooking-shared
 version:        0.0.0
@@ -62,7 +62,6 @@ library
     , bytestring
     , emailaddress >=0.2.0.1
     , hashable
-    , localcooking-fb
     , newtype
     , persistent
     , persistent-template
@@ -91,7 +90,6 @@ test-suite localcooking-shared-test
     , bytestring
     , emailaddress >=0.2.0.1
     , hashable
-    , localcooking-fb
     , localcooking-shared
     , newtype
     , persistent
