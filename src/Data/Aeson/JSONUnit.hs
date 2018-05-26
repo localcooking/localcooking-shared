@@ -22,3 +22,10 @@ instance FromJSON JSONUnit where
     _ -> fail'
     where
       fail' = typeMismatch "JSONUnit" json
+
+
+boolToUnit :: Bool -> Maybe JSONUnit
+boolToUnit ok
+  | ok = Just JSONUnit
+  | otherwise = Nothing
+
