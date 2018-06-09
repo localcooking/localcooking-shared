@@ -37,7 +37,7 @@ packages:
 - .
 - location:
     git: git@git.localcooking.com:private-tooling/emailaddress.git
-    commit: cd9f286e7f5038051ce62c6151f9f1c58da41fd5
+    commit: d4c426e1a9c6d5b53be4782b072cf0746049bfa7
   extra-dep: true
 # Dependency packages to be pulled from upstream that are not in the resolver
 # using the same syntax as the packages field.
