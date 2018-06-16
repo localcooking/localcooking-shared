@@ -16,7 +16,7 @@ import Test.QuickCheck.Instances ()
 
 newtype ImageSource = ImageSource
   { getImageSource :: Int
-  } deriving (Eq, Ord, Enum, Show, PersistField, PersistFieldSql, Hashable, Generic, ToJSON, FromJSON)
+  } deriving (Eq, Ord, Enum, Show, Num, PersistField, PersistFieldSql, Hashable, Generic, ToJSON, FromJSON)
 
 instance Arbitrary ImageSource where
   arbitrary = ImageSource <$> arbitrary
