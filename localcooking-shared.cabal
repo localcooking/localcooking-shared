@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f65f88bee2c022bd03c40e1ad3c07584b548e9b59c317e546e11d6ba493eaff1
+-- hash: 5568e468ceee5f315fe0d8d97c13bf43bdc2c43efc21408256aefa1f509c33b1
 
 name:           localcooking-shared
 version:        0.0.0
@@ -32,6 +32,7 @@ library
       Data.List.Sorting
       Data.Price
       Data.Text.Markdown
+      Data.Text.NonEmptyAlpha
       Data.Text.Permalink
       LocalCooking.Common.AccessToken
       LocalCooking.Common.AccessToken.Auth
