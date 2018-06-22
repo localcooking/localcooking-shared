@@ -9,7 +9,6 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Hashable (Hashable)
 import Data.Aeson (FromJSON, ToJSON)
-import Data.List.NonEmpty (NonEmpty)
 import Database.Persist.Class (PersistField)
 import Database.Persist.Sql (PersistFieldSql)
 import GHC.Generics (Generic)
