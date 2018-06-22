@@ -6,18 +6,28 @@
 
 module LocalCooking.Common.ContentRecord where
 
+import LocalCooking.Common.Tag.Chef (ChefTag)
+import LocalCooking.Common.Tag.Culture (CultureTag)
+import LocalCooking.Common.Tag.Diet (DietTag)
+import LocalCooking.Common.Tag.Farm (FarmTag)
+import LocalCooking.Common.Tag.Ingredient (IngredientTag)
+import LocalCooking.Common.Tag.Meal (MealTag)
+
 import Data.Aeson (FromJSON (..), ToJSON (..), Value (String, Object), object, (.:), (.=))
 import Data.Aeson.Types (typeMismatch)
 import Data.Aeson.Attoparsec (attoAeson)
 import Data.Attoparsec.Text (Parser, string)
 import Data.Hashable (Hashable)
 import Control.Applicative ((<|>))
-import Database.Persist.TH (derivePersistField)
+import Database.Persist.TH (derivePersistFieldJSON)
 import GHC.Generics (Generic)
 import Test.QuickCheck (Arbitrary (..))
 import Test.QuickCheck.Gen (oneof)
 
 
+
+
+-- * Variants
 
 data TagRecordVariant
   = TagVariantChef
@@ -27,7 +37,7 @@ data TagRecordVariant
   | TagVariantIngredient
   | TagVariantMeal
   deriving (Eq, Ord, Enum, Bounded, Show, Read, Generic)
-derivePersistField "TagRecordVariant"
+derivePersistFieldJSON "TagRecordVariant"
 
 instance Arbitrary TagRecordVariant where
   arbitrary = oneof
@@ -71,7 +81,7 @@ tagRecordVariantParser = do
 data ContentRecordVariant
   = TagRecordVariant TagRecordVariant
   deriving (Eq, Ord, Show, Read, Generic)
-derivePersistField "ContentRecordVariant"
+derivePersistFieldJSON "ContentRecordVariant"
 
 instance Enum ContentRecordVariant where
   fromEnum x = case x of
@@ -105,11 +115,79 @@ instance Hashable ContentRecordVariant
 
 instance ToJSON ContentRecordVariant where
   toJSON x = case x of
-    TagRecordVariant y -> object ["tag" .= y]
+    TagRecordVariant y -> object ["tagVariant" .= y]
 
 instance FromJSON ContentRecordVariant where
   parseJSON json = case json of
     Object o -> do
-      let tag = TagRecordVariant <$> o .: "tag"
+      let tag = TagRecordVariant <$> o .: "tagVariant"
       tag
     _ -> typeMismatch "ContentRecordVariant" json
+
+
+
+-- * Records
+
+
+data TagRecord
+  = TagRecordChef       ChefTag
+  | TagRecordCulture    CultureTag
+  | TagRecordDiet       DietTag
+  | TagRecordFarm       FarmTag
+  | TagRecordIngredient IngredientTag
+  | TagRecordMeal       MealTag
+  deriving (Eq, Ord, Show, Generic)
+derivePersistFieldJSON "TagRecord"
+
+instance Arbitrary TagRecord where
+  arbitrary = oneof
+    [ TagRecordChef <$> arbitrary
+    , TagRecordCulture <$> arbitrary
+    , TagRecordDiet <$> arbitrary
+    , TagRecordFarm <$> arbitrary
+    , TagRecordIngredient <$> arbitrary
+    , TagRecordMeal <$> arbitrary
+    ]
+
+instance ToJSON TagRecord where
+  toJSON x = case x of
+    TagRecordChef y -> object ["chef" .= y]
+    TagRecordCulture y -> object ["culture" .= y]
+    TagRecordDiet y -> object ["diet" .= y]
+    TagRecordFarm y -> object ["farm" .= y]
+    TagRecordIngredient y -> object ["ingredient" .= y]
+    TagRecordMeal y -> object ["meal" .= y]
+
+instance FromJSON TagRecord where
+  parseJSON json = case json of
+    Object o -> do
+      let chef = TagRecordChef <$> o .: "chef"
+          culture = TagRecordCulture <$> o .: "culture"
+          diet = TagRecordDiet <$> o .: "diet"
+          farm = TagRecordFarm <$> o .: "farm"
+          ingredient = TagRecordIngredient <$> o .: "ingredient"
+          meal = TagRecordMeal <$> o .: "meal"
+      chef <|> culture <|> diet <|> farm <|> ingredient <|> meal
+    _ -> typeMismatch "TagRecord" json
+
+
+data ContentRecord
+  = TagRecord TagRecord
+  deriving (Eq, Ord, Show, Generic)
+derivePersistFieldJSON "ContentRecord"
+
+instance Arbitrary ContentRecord where
+  arbitrary = oneof
+    [ TagRecord <$> arbitrary
+    ]
+
+instance ToJSON ContentRecord where
+  toJSON x = case x of
+    TagRecord y -> object ["tagRecord" .= y]
+
+instance FromJSON ContentRecord where
+  parseJSON json = case json of
+    Object o -> do
+      let tag = TagRecord <$> o .: "tagRecord"
+      tag
+    _ -> typeMismatch "ContentRecord" json
