@@ -136,7 +136,7 @@ data TagRecord
   | TagRecordFarm       FarmTag
   | TagRecordIngredient IngredientTag
   | TagRecordMeal       MealTag
-  deriving (Eq, Ord, Show, Generic)
+  deriving (Eq, Show, Generic)
 derivePersistFieldJSON "TagRecord"
 
 instance Arbitrary TagRecord where
@@ -183,7 +183,7 @@ tagRecordVariant x = case x of
 
 data ContentRecord
   = TagRecord TagRecord
-  deriving (Eq, Ord, Show, Generic)
+  deriving (Eq, Show, Generic)
 derivePersistFieldJSON "ContentRecord"
 
 instance Arbitrary ContentRecord where
