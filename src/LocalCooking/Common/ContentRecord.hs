@@ -170,6 +170,16 @@ instance FromJSON TagRecord where
       chef <|> culture <|> diet <|> farm <|> ingredient <|> meal
     _ -> typeMismatch "TagRecord" json
 
+tagRecordVariant :: TagRecord -> TagRecordVariant
+tagRecordVariant x = case x of
+  TagRecordChef _ -> TagVariantChef
+  TagRecordCulture _ -> TagVariantCulture
+  TagRecordDiet _ -> TagVariantDiet
+  TagRecordFarm _ -> TagVariantFarm
+  TagRecordIngredient _ -> TagVariantIngredient
+  TagRecordMeal _ -> TagVariantMeal
+
+
 
 data ContentRecord
   = TagRecord TagRecord
@@ -191,3 +201,8 @@ instance FromJSON ContentRecord where
       let tag = TagRecord <$> o .: "tagRecord"
       tag
     _ -> typeMismatch "ContentRecord" json
+
+
+contentRecordVariant :: ContentRecord -> ContentRecordVariant
+contentRecordVariant x = case x of
+  TagRecord y -> TagRecordVariant (tagRecordVariant y)
