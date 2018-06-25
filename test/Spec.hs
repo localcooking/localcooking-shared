@@ -4,7 +4,6 @@
   #-}
 
 import LocalCooking.Common.AccessToken (AccessToken)
-import LocalCooking.Common.Diet (Diet)
 import LocalCooking.Common.Ingredient (Ingredient)
 import LocalCooking.Common.Order (OrderProgress)
 import LocalCooking.Common.Rating (Rating)
@@ -39,7 +38,6 @@ main = defaultMain $ testGroup "JSON encodings"
   , testProperty "Data.Text.Markdown" (\(x :: MarkdownText) -> jsonIso x)
   , testProperty "Data.Text.Permalink" (\(x :: Permalink) -> jsonIso x)
   , testProperty "LocalCooking.Common.AccessToken" (\(x :: AccessToken) -> jsonIso x)
-  , testProperty "LocalCooking.Common.Diet" (\(x :: Diet) -> jsonIso x)
   , testProperty "LocalCooking.Common.Ingredient" (\(x :: Ingredient) -> jsonIso x)
   , testProperty "LocalCooking.Common.Order" (\(x :: OrderProgress) -> jsonIso x)
   , testProperty "LocalCooking.Common.Rating" (\(x :: Rating) -> jsonIso x)
