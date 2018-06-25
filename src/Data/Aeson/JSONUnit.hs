@@ -29,3 +29,6 @@ boolToUnit ok
   | ok = Just JSONUnit
   | otherwise = Nothing
 
+
+unitToUnit :: () -> Maybe JSONUnit
+unitToUnit () = Just JSONUnit
