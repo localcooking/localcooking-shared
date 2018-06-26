@@ -19,3 +19,6 @@ cabal.sandbox.config
 Dockerfile
 target/
 TAGS
+.stack-work/
+localcooking-dependencies.cabal
+*~
