@@ -20,5 +20,5 @@ Dockerfile
 target/
 TAGS
 .stack-work/
-localcooking-dependencies.cabal
+*.cabal
 *~
