@@ -12,6 +12,7 @@ import Data.Hashable (Hashable)
 import Data.Aeson (FromJSON (..), ToJSON (toJSON), Value (String))
 import Data.Aeson.Attoparsec (attoAeson)
 import Data.Attoparsec.Text (Parser, string)
+import Data.Text (Text)
 import Control.Applicative ((<|>))
 import GHC.Generics (Generic)
 import Database.Persist.TH (derivePersistField)
@@ -52,3 +53,14 @@ blogPostVariantParser = do
       business = BusinessBlogPost <$ string "business"
       personal = PersonalBlogPost <$ string "personal"
   casual <|> business <|> personal
+
+
+
+newtype BlogPostPriority = BlogPostPriority
+  { getBlogPostPriority :: Int
+  } deriving (Eq, Show, Read, Ord, Enum, Num, FromJSON, ToJSON, Arbitrary)
+
+
+newtype BlogPostCategory = BlogPostCategory
+  { getBlogPostCategory :: Text
+  } deriving (Eq, Show, Read, FromJSON, ToJSON, Arbitrary)
