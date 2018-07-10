@@ -59,8 +59,9 @@ blogPostVariantParser = do
 newtype BlogPostPriority = BlogPostPriority
   { getBlogPostPriority :: Int
   } deriving (Eq, Show, Read, Ord, Enum, Num, FromJSON, ToJSON, Arbitrary)
-
+derivePersistField "BlogPostPriority"
 
 newtype BlogPostCategory = BlogPostCategory
   { getBlogPostCategory :: Text
   } deriving (Eq, Show, Read, FromJSON, ToJSON, Arbitrary)
+derivePersistField "BlogPostCategory"
