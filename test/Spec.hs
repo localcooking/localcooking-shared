@@ -8,6 +8,7 @@ import LocalCooking.Common.Ingredient (Ingredient)
 import LocalCooking.Common.Order (OrderProgress)
 import LocalCooking.Common.Rating (Rating)
 import LocalCooking.Common.Tag (Tag)
+import LocalCooking.Common.Blog (BlogPostVariant)
 import LocalCooking.Common.User.Name (Name)
 import LocalCooking.Common.User.Role (UserRole)
 import LocalCooking.Common.User.Password (HashedPassword)
@@ -45,6 +46,7 @@ main = defaultMain $ testGroup "JSON encodings"
   , testProperty "LocalCooking.Common.User.Name" (\(x :: Name) -> jsonIso x)
   , testProperty "LocalCooking.Common.User.Role" (\(x :: UserRole) -> jsonIso x)
   , testProperty "LocalCooking.Common.User.Password" (\(x :: HashedPassword) -> jsonIso x)
+  , testProperty "LocalCooking.Common.Blog" (\(x :: BlogPostVariant) -> jsonIso x)
 
   ]
 
