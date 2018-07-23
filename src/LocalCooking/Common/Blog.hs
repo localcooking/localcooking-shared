@@ -13,6 +13,7 @@ import Data.Aeson (FromJSON (..), ToJSON (toJSON), Value (String))
 import Data.Aeson.Attoparsec (attoAeson)
 import Data.Attoparsec.Text (Parser, string)
 import Data.Text (Text)
+import qualified Data.Text as T
 import Control.Applicative ((<|>))
 import GHC.Generics (Generic)
 import Database.Persist.TH (derivePersistField)
@@ -58,10 +59,16 @@ blogPostVariantParser = do
 
 newtype BlogPostPriority = BlogPostPriority
   { getBlogPostPriority :: Int
-  } deriving (Eq, Show, Read, Ord, Enum, Num, FromJSON, ToJSON, Arbitrary)
+  } deriving (Eq, Read, Ord, Enum, Num, FromJSON, ToJSON, Arbitrary)
 derivePersistField "BlogPostPriority"
+
+instance Show BlogPostPriority where
+  show (BlogPostPriority i) = show i
 
 newtype BlogPostCategory = BlogPostCategory
   { getBlogPostCategory :: Text
-  } deriving (Eq, Show, Read, FromJSON, ToJSON, Arbitrary)
+  } deriving (Eq, Read, FromJSON, ToJSON, Arbitrary)
 derivePersistField "BlogPostCategory"
+
+instance Show BlogPostCategory where
+  show (BlogPostCategory x) = T.unpack x
