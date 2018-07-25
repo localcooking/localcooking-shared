@@ -24,3 +24,7 @@ instance (FromJSON a, FromJSON b) => FromJSON (JSONTuple a b) where
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (JSONTuple a b) where
   arbitrary = JSONTuple <$> arbitrary <*> arbitrary
+
+
+uncurryJSONTuple :: (a -> b -> c) -> JSONTuple a b -> c
+uncurryJSONTuple f (JSONTuple a b) = f a b
