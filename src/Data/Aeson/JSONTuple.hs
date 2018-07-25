@@ -6,6 +6,7 @@ module Data.Aeson.JSONTuple where
 
 import Data.Aeson (ToJSON (..), FromJSON (..), Value (Object), object, (.=), (.:))
 import Data.Aeson.Types (typeMismatch)
+import Test.QuickCheck (Arbitrary (..))
 
 
 data JSONTuple a b = JSONTuple a b
@@ -20,3 +21,6 @@ instance (FromJSON a, FromJSON b) => FromJSON (JSONTuple a b) where
     _ -> fail'
     where
       fail' = typeMismatch "JSONTuple" json
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (JSONTuple a b) where
+  arbitrary = JSONTuple <$> arbitrary <*> arbitrary
