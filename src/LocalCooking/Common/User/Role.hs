@@ -17,6 +17,7 @@ import Test.QuickCheck (Arbitrary (..))
 import Test.QuickCheck.Gen (oneof)
 
 
+
 data UserRole
   = Customer
   | Chef
@@ -24,7 +25,7 @@ data UserRole
   | Editor
   | Manager
   | Admin
-  deriving (Eq, Ord, Enum, Show, Read, Generic)
+  deriving (Eq, Ord, Enum, Bounded, Show, Read, Generic)
 derivePersistField "UserRole"
 
 instance Arbitrary UserRole where
